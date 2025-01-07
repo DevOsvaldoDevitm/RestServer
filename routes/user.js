@@ -5,9 +5,17 @@ import { usuariosDelete,
         usuariosPost, 
         usuariosPut 
         } from '../controllers/usuarios.js';
-import { validarCampos } from '../middleware/validar-campos.js';
+
 import { check } from 'express-validator';
 import { emailExist, esRoleValido, existeUsuarioporID } from '../helpers/db-validators.js';
+
+
+import {
+        validarCampos,
+        validarJWT,
+        validarRoles,
+        adminRole
+} from "../middleware/index.js" ;
 
 
 const router = Router(); // Instancia del enrutador
@@ -35,6 +43,9 @@ router.post('/',
         ,usuariosPost )
 
 router.delete('/:id', [
+        validarJWT,
+        // adminRole => TIENE QUE SER ADMIN,
+        validarRoles('ADMIN_ROLE', 'VENTAS_ROLE'),
         check('id', 'No es un ID valido').isMongoId(),
         check('id').custom( existeUsuarioporID ),
         validarCampos
@@ -43,4 +54,4 @@ router.delete('/:id', [
 
 router.patch('/', usuariosPatch);
 
-export { router }; // Exporta el enrutador
+export default router ; // Exporta el enrutador

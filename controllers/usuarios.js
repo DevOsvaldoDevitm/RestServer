@@ -3,6 +3,8 @@ import Usuario from "../models/usuario.js";
 import bcryptjs from "bcryptjs";
 
 
+
+
 const usuariosGet = async(req, res = response) => {
 
     const {limite = 5, desde = 0} = req.query;
@@ -65,10 +67,7 @@ const  usuariosPost = async(req, res = response) => {
 const usuariosDelete = async(req, res = response) => {
     const {id} = req.params;
 
-    // Fisicamente borrado
-    // const usuario = await Usuario.findByIdAndDelete( id );
     const usuario = await Usuario.findByIdAndUpdate( id, {estado: false} );
-
     res.json({
         usuario
     });
