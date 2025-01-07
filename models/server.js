@@ -3,15 +3,25 @@ import cors from 'cors';
 
 import userRouter from '../routes/user.js'; // Importa directamente el router
 import authRouter from '../routes/auth.js'; // Importa directamente el router
+import categoriasRouter from '../routes/categorias.js'; 
+import productosRouter from '../routes/productos.js'
 import dbConection from '../database/config.js';
+import  buscarRouter from '../routes/buscar.js';
 
 class Server{
 
     constructor(){
         this.app = express();
         this.port = process.env.PORT;
-        this.usariosRoutePath = '/api/usuarios';
-        this.authPath = '/api/auth';
+
+        this.paths = {
+            auth:       '/api/auth',
+            buscar:     '/api/buscar',
+            categorias: '/api/categorias',
+            usuarios:   '/api/usuarios',
+            productos:  '/api/productos'
+
+        }
 
         // Conectar a BD
         this.Database();
@@ -43,8 +53,11 @@ class Server{
 
 
     routes(){
-        this.app.use(this.usariosRoutePath,userRouter);
-        this.app.use(this.authPath, authRouter);
+        this.app.use(this.paths.auth, authRouter);
+        this.app.use(this.paths.categorias, categoriasRouter);
+        this.app.use(this.paths.usuarios,userRouter);
+        this.app.use(this.paths.productos,productosRouter);
+        this.app.use(this.paths.buscar,buscarRouter);
         
     }
 
