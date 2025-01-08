@@ -5,8 +5,11 @@ import userRouter from '../routes/user.js'; // Importa directamente el router
 import authRouter from '../routes/auth.js'; // Importa directamente el router
 import categoriasRouter from '../routes/categorias.js'; 
 import productosRouter from '../routes/productos.js'
-import dbConection from '../database/config.js';
 import  buscarRouter from '../routes/buscar.js';
+import uploadsRouter from '../routes/uploads.js';
+
+import dbConection from '../database/config.js';
+import fileUpload from 'express-fileupload';
 
 class Server{
 
@@ -19,6 +22,7 @@ class Server{
             buscar:     '/api/buscar',
             categorias: '/api/categorias',
             usuarios:   '/api/usuarios',
+            uploads:    '/api/uploads',
             productos:  '/api/productos'
 
         }
@@ -48,6 +52,14 @@ class Server{
 
         // Directorio publico
         this.app.use( express.static( 'public' ));
+
+        // Carga de archivos
+        // Note that this option available for versions 1.0.0 and newer. 
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/',
+            createParentPath: true
+        }));
     
     }
 
@@ -58,6 +70,7 @@ class Server{
         this.app.use(this.paths.usuarios,userRouter);
         this.app.use(this.paths.productos,productosRouter);
         this.app.use(this.paths.buscar,buscarRouter);
+        this.app.use(this.paths.uploads,uploadsRouter);
         
     }
 
